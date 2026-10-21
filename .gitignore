@@ -1,0 +1,15 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.idea/
+.vscode/
+
+# Secretos y variables de entorno
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
