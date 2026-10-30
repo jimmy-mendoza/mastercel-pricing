@@ -19,11 +19,12 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    // controla los errores de coflicto como los campos vacíos
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> manejarValidacion(MethodArgumentNotValidException ex) {
-        String mensaje = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> error.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+        String mensaje = ex.getBindingResult().getFieldErrors().stream() // obtiene el resultado de validación luego obtiene los errores
+                .map(error -> error.getDefaultMessage()) // y los convierte en mensajes
+                .collect(Collectors.joining(", ")); //y los separa con " , "
         return construir(HttpStatus.BAD_REQUEST, mensaje);
     }
 

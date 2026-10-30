@@ -51,7 +51,7 @@ public class ProveedorService {
         proveedor.setNombre(request.nombre());
         proveedor.setUbicacion(request.ubicacion());
 
-        return   proveedorMapper.toResponse(proveedoresRepository.save(proveedorMapper.toEntity(request)));
+        return   proveedorMapper.toResponse(proveedoresRepository.save(proveedor));
     }
 
     @Transactional
