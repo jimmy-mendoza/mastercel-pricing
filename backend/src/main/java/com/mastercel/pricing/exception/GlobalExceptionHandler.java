@@ -28,6 +28,11 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.BAD_REQUEST, mensaje);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> manejarPeticionInvalida(BadRequestException ex) {
+        return construir(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> construir(HttpStatus status, String mensaje) {
         ErrorResponse body = new ErrorResponse(status.value(),mensaje, LocalDateTime.now());
         return ResponseEntity.status(status).body(body);
