@@ -4,9 +4,11 @@ import com.mastercel.pricing.enums.Calidad;
 import com.mastercel.pricing.enums.TipoConsulta;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Audited;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "consultas")
+@Audited.Table(name = "consultas")
 @SQLDelete(sql = "UPDATE consultas SET estado = false WHERE id = ?")
 @SQLRestriction("estado = true")
 public class Consultas {
@@ -27,6 +29,10 @@ public class Consultas {
     @Enumerated(EnumType.STRING)
     private TipoConsulta tipo;
 
+    @Column(precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal garantiaExtendida = BigDecimal.ZERO;
+    
     private String marca;
     private String modelo;
     private String nombreRepuesto;
