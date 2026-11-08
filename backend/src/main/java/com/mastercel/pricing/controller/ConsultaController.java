@@ -1,9 +1,6 @@
 package com.mastercel.pricing.controller;
 
-import com.mastercel.pricing.dto.ConsultaCalculoResponse;
-import com.mastercel.pricing.dto.ConsultaRequest;
-import com.mastercel.pricing.dto.ConsultaResponse;
-import com.mastercel.pricing.dto.ConsultaResumenResponse;
+import com.mastercel.pricing.dto.*;
 import com.mastercel.pricing.enums.TipoConsulta;
 import com.mastercel.pricing.service.ConsultaService;
 import jakarta.validation.Valid;
@@ -40,5 +37,17 @@ public class ConsultaController {
     public List<ConsultaResumenResponse> listar(@RequestParam TipoConsulta tipo,
                                                 @RequestParam(required = false) String modelo) {
         return consultaService.listar(tipo, modelo);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> eliminar (@PathVariable Long id){
+        consultaService.eliminar(id);
+        return ResponseEntity.ok(new MessageResponse("Consulta eliminada correctamente"));
+    }
+
+    @PutMapping("/actualizar/{id}")
+    public ConsultaResponse actualizar(@Valid @RequestBody ConsultaRequest consultaRequest,
+                                                      @PathVariable Long id) {
+        return consultaService.actualizar(consultaRequest,id);
     }
 }

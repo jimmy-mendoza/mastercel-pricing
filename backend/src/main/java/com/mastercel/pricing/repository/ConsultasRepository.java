@@ -1,5 +1,6 @@
 package com.mastercel.pricing.repository;
 
+import com.mastercel.pricing.dto.ConsultaResponse;
 import com.mastercel.pricing.entity.Consultas;
 import com.mastercel.pricing.enums.TipoConsulta;
 import org.springframework.data.jpa.repository.EntityGraph;

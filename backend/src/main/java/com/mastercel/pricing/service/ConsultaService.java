@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.NotCompliantMBeanException;
 import java.util.List;
 
 @Service
@@ -59,7 +58,7 @@ public class ConsultaService {
 
         return new ConsultaMapper().toResponse(guardada);
     }
-
+    // Metodo para validar nombre
     private void validarNombreRepuesto(ConsultaRequest request) {
 
         boolean esRepuesto = request.tipo() == TipoConsulta.REPUESTO;
@@ -88,5 +87,48 @@ public class ConsultaService {
         Consultas consulta = consultasRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Consulta no encontrada con id: "+id));
         return new ConsultaMapper().toResponse(consulta);
+    }
+
+    @Transactional
+    public ConsultaResponse actualizar(ConsultaRequest request,Long id) {
+
+        Consultas consulta = consultasRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("no se encontro la consulta con el id: " + id));
+
+        validarNombreRepuesto(request);
+
+        Proveedores proveedor = proveedoresRepository.findById(request.proveedorId())
+                .orElseThrow(() -> new NotFoundException("No se encontro el proveedor con el id: " + request.proveedorId()));
+
+        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costo());
+
+        String nombreRepuesto = request.tipo() == TipoConsulta.REPUESTO
+                ? request.nombreRepuesto().trim() : null;
+
+                consulta.setCalidad(request.calidad());
+                consulta.setModelo(request.modelo().trim());
+                consulta.setNombreRepuesto(nombreRepuesto);
+                consulta.setCalidad(request.calidad());
+                consulta.setCosto(request.costo());
+                consulta.setProveedor(proveedor);
+                consulta.setPrecioClienteGarantia(precios.clienteGarantia());
+                consulta.setPrecioClienteSinGarantia(precios.clienteSinGarantia());
+                consulta.setPrecioMayoristaGarantia(precios.mayoristaGarantia());
+                consulta.setPrecioMayoristaSinGarantia(precios.mayoristaSinGarantia());
+
+        Consultas guardada = consultasRepository.save(consulta);
+
+        return new ConsultaMapper().toResponse(guardada);
+    }
+
+    @Transactional
+    public void eliminar(Long id) {
+        Consultas consulta = buscarPorId(id);
+        consultasRepository.delete(consulta);
+    }
+
+    private Consultas buscarPorId(Long id) {
+        return consultasRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Consulta no encontrada con id: " + id));
     }
 }
