@@ -29,6 +29,10 @@ public class Consultas {
     @Enumerated(EnumType.STRING)
     private TipoConsulta tipo;
 
+    @Column(precision = 10, scale = 2)
+    @Builder.Default
+    private BigDecimal garantiaExtendida = BigDecimal.ZERO;
+    
     private String marca;
     private String modelo;
     private String nombreRepuesto;

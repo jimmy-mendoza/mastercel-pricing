@@ -16,6 +16,8 @@ public record ConsultaResponse(
         Long ProveedorId,
         String ProveedorNombre,
         BigDecimal costo,
+        BigDecimal garantiaExtendida,
+        BigDecimal costoTotal,
         PreciosCalculados precios,
         LocalDateTime fecha
 ) {

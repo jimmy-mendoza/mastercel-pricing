@@ -12,6 +12,8 @@ public record ConsultaCalculoResponse(
         String nombreRepuesto,
         Calidad calidad,
         BigDecimal costo,
+        BigDecimal garantiaExtendida,
+        BigDecimal costoTotal,
         PreciosCalculados precios
 ) {
 }

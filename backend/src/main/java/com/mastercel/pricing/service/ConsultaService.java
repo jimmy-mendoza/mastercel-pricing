@@ -26,7 +26,7 @@ public class ConsultaService {
 
     public ConsultaCalculoResponse calcular(ConsultaRequest request) {
 
-        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costo());
+        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costoTotal());
 
         String nombreRepuesto = request.nombreRepuesto() == null ? null : request.nombreRepuesto().trim();
 
@@ -37,6 +37,8 @@ public class ConsultaService {
                 nombreRepuesto,
                 request.calidad(),
                 request.costo(),
+                request.garantiaExtendidaNormalizada(),
+                request.costoTotal(),
                 precios
         );
     }
@@ -51,7 +53,7 @@ public class ConsultaService {
                 .orElseThrow(() -> new NotFoundException(
                         "No se encontro el proveedor con el id: " + request.proveedorId()));
         // Calculammos los precios de la Request
-        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costo());
+        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costoTotal());
         // guardamos la consulta con el con el proveedor y los precios ya calculados
         Consultas guardada = consultasRepository.save(
                 consultaMapper.toEntity(request, proveedor, precios));
@@ -100,7 +102,7 @@ public class ConsultaService {
         Proveedores proveedor = proveedoresRepository.findById(request.proveedorId())
                 .orElseThrow(() -> new NotFoundException("No se encontro el proveedor con el id: " + request.proveedorId()));
 
-        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costo());
+        PreciosCalculados precios = calculadoraPreciosService.calcular(request.tipo(), request.costoTotal());
 
         String nombreRepuesto = request.tipo() == TipoConsulta.REPUESTO
                 ? request.nombreRepuesto().trim() : null;
@@ -111,6 +113,7 @@ public class ConsultaService {
                 consulta.setCalidad(request.calidad());
                 consulta.setCosto(request.costo());
                 consulta.setProveedor(proveedor);
+                consulta.setGarantiaExtendida(request.garantiaExtendidaNormalizada());
                 consulta.setPrecioClienteGarantia(precios.clienteGarantia());
                 consulta.setPrecioClienteSinGarantia(precios.clienteSinGarantia());
                 consulta.setPrecioMayoristaGarantia(precios.mayoristaGarantia());

@@ -25,6 +25,7 @@ public class ConsultaMapper {
                 .calidad(request.calidad())
                 .proveedor(proveedor)
                 .costo(request.costo())
+                .garantiaExtendida(request.garantiaExtendidaNormalizada())
                 .precioClienteGarantia(precios.clienteGarantia())
                 .precioClienteSinGarantia(precios.clienteSinGarantia())
                 .precioMayoristaGarantia(precios.mayoristaGarantia())
@@ -51,6 +52,8 @@ public class ConsultaMapper {
                 consulta.getProveedor().getId(),
                 consulta.getProveedor().getNombre(),
                 consulta.getCosto(),
+                consulta.getGarantiaExtendida(),
+                consulta.getCosto().add(consulta.getGarantiaExtendida()),
                 precios, // objeto de precios
                 consulta.getFecha()
         );
